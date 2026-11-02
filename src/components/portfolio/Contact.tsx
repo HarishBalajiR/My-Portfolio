@@ -36,7 +36,7 @@ const Contact = () => {
           >
             <a
               href={`mailto:${EMAIL}`}
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-lg bg-primary text-primary-foreground font-bold text-lg hover:opacity-90 transition-opacity shadow-lg"
+              className="group inline-flex items-center gap-3 px-8 py-4 bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-0.5"
             >
               <Mail className="w-5 h-5" />
               {EMAIL}
@@ -48,18 +48,25 @@ const Contact = () => {
             className="mt-12 flex flex-wrap justify-center gap-4 animate-fade-up"
             style={{ animationDelay: "0.3s" }}
           >
-            {socials.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-lg border-2 border-border hover:border-foreground transition-colors"
-              >
-                <social.icon className="w-4 h-4" />
-                <span className="font-medium">{social.label}</span>
-              </a>
-            ))}
+            {socials.map((social) => {
+              const isLinkedIn = social.label === "LinkedIn";
+              return (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`group inline-flex items-center gap-2 px-5 py-3 border-2 rounded-lg transition-all duration-300 hover:scale-105 hover:-translate-y-0.5 bg-background/50 ${
+                    isLinkedIn
+                      ? 'border-[#0A66C2]/30 hover:border-[#0A66C2] hover:bg-[#0A66C2]/5'
+                      : 'border-border hover:border-foreground/30 hover:bg-secondary/50'
+                  }`}
+                >
+                  <social.icon className={`w-5 h-5 ${isLinkedIn ? 'text-foreground group-hover:text-[#0A66C2] transition-colors' : ''}`} />
+                  <span className={`font-medium ${isLinkedIn ? 'text-foreground group-hover:text-[#0A66C2] transition-colors' : ''}`}>{social.label}</span>
+                </a>
+              );
+            })}
           </div>
         </div>
 

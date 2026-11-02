@@ -18,11 +18,11 @@
     --primary: 0 0% 7%;
     --primary-foreground: 40 30% 96%;
 
-    --secondary: 40 20% 90%;
+    --secondary: 40 22% 82%;
     --secondary-foreground: 0 0% 7%;
 
-    --muted: 40 20% 90%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 40 22% 82%;
+    --muted-foreground: 0 0% 30%;
 
     --accent: 348 79% 61%;
     --accent-foreground: 40 30% 96%;
@@ -30,8 +30,8 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 40 30% 96%;
 
-    --border: 40 15% 85%;
-    --input: 40 15% 85%;
+    --border: 40 18% 70%;
+    --input: 40 18% 70%;
     --ring: 0 0% 7%;
 
     --radius: 1.25rem;
@@ -73,10 +73,10 @@
       --primary: 40 30% 96%;
       --primary-foreground: 0 0% 4%;
 
-      --secondary: 0 0% 10%;
+      --secondary: 0 0% 14%;
       --secondary-foreground: 40 30% 96%;
 
-      --muted: 0 0% 10%;
+      --muted: 0 0% 14%;
       --muted-foreground: 0 0% 60%;
 
       --accent: 348 79% 61%;
@@ -85,8 +85,8 @@
       --destructive: 0 84% 60%;
       --destructive-foreground: 40 30% 96%;
 
-      --border: 0 0% 15%;
-      --input: 0 0% 15%;
+      --border: 0 0% 25%;
+      --input: 0 0% 25%;
       --ring: 40 30% 96%;
 
       --glow: 348 79% 61%;
@@ -289,6 +289,52 @@
       top: 100%;
       opacity: 0;
     }
+  }
+
+  /* Hero Button Styles - Light Mode */
+  .hero-secondary-btn {
+    border: 2px solid hsl(0, 0%, 20%);
+    background-color: hsl(40, 15%, 88%);
+    color: hsl(0, 0%, 10%);
+  }
+
+  .hero-secondary-btn:hover {
+    background-color: hsl(40, 18%, 85%);
+    border-color: hsl(0, 0%, 15%);
+  }
+
+  .hero-skill-badge {
+    border: 2px solid hsl(0, 0%, 25%);
+    background-color: hsl(40, 15%, 88%);
+    color: hsl(0, 0%, 10%);
+  }
+
+  .hero-skill-badge:hover {
+    background-color: hsl(40, 18%, 85%);
+    border-color: hsl(0, 0%, 20%);
+  }
+
+  /* Hero Button Styles - Dark Mode */
+  .dark .hero-secondary-btn {
+    border: 2px solid hsl(0, 0%, 40%);
+    background-color: hsl(0, 0%, 18%);
+    color: hsl(40, 30%, 96%);
+  }
+
+  .dark .hero-secondary-btn:hover {
+    background-color: hsl(0, 0%, 22%);
+    border-color: hsl(0, 0%, 50%);
+  }
+
+  .dark .hero-skill-badge {
+    border: 2px solid hsl(0, 0%, 35%);
+    background-color: hsl(0, 0%, 18%);
+    color: hsl(40, 30%, 96%);
+  }
+
+  .dark .hero-skill-badge:hover {
+    background-color: hsl(0, 0%, 22%);
+    border-color: hsl(0, 0%, 45%);
   }
 
   /* Floating orb animations */
