@@ -1,17 +1,21 @@
 import Nav from "@/components/portfolio/Nav";
 import Hero from "@/components/portfolio/Hero";
-import About from "@/components/portfolio/About";
-import Work from "@/components/portfolio/Work";
-import Experience from "@/components/portfolio/Experience";
-import LiveStats from "@/components/portfolio/LiveStats";
-import Profiles from "@/components/portfolio/Profiles";
-import Contact from "@/components/portfolio/Contact";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
+
+// Lazy load atmospheric background after hero loads
+const AtmosphericBackground = lazy(() => import(/* webpackChunkName: "atmosphere" */ "@/components/AtmosphericBackground"));
+
+// Lazy load sections that aren't immediately visible
+const LiveStats = lazy(() => import(/* webpackChunkName: "stats" */ "@/components/portfolio/LiveStats"));
+const Achievements = lazy(() => import(/* webpackChunkName: "achievements" */ "@/components/portfolio/Achievements"));
+const Work = lazy(() => import(/* webpackChunkName: "work" */ "@/components/portfolio/Work"));
+const Experience = lazy(() => import(/* webpackChunkName: "experience" */ "@/components/portfolio/Experience"));
+const Contact = lazy(() => import(/* webpackChunkName: "contact" */ "@/components/portfolio/Contact"));
 
 const Index = () => {
   useEffect(() => {
-    document.title = "Harish Balaji R — CS Freshman & Aspiring Software Engineer";
-    const desc = "Portfolio of Harish Balaji R, B.E. Computer Science freshman at St Joseph's College of Engineering, Chennai. Learning full-stack development and problem-solving.";
+    document.title = "Harish Balaji R | SWE Candidate";
+    const desc = "Portfolio of Harish Balaji R, a second-year B.E. Computer Science student at St Joseph's College of Engineering, Chennai, focused on SWE internships, full-time roles, C++, Python, HTML, Git, GitHub, and problem solving.";
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) {
       meta = document.createElement("meta");
@@ -31,15 +35,27 @@ const Index = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="min-h-screen text-foreground relative">
+      <Suspense fallback={null}>
+        <AtmosphericBackground />
+      </Suspense>
       <Nav />
       <Hero />
-      <About />
-      <Work />
-      <Experience />
-      <LiveStats />
-      <Profiles />
-      <Contact />
+      <Suspense fallback={<div className="h-screen" />}>
+        <LiveStats />
+      </Suspense>
+      <Suspense fallback={<div className="h-screen" />}>
+        <Achievements />
+      </Suspense>
+      <Suspense fallback={<div className="h-screen" />}>
+        <Work />
+      </Suspense>
+      <Suspense fallback={<div className="h-screen" />}>
+        <Experience />
+      </Suspense>
+      <Suspense fallback={<div className="h-screen" />}>
+        <Contact />
+      </Suspense>
     </main>
   );
 };

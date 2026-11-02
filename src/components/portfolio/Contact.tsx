@@ -1,59 +1,76 @@
-import { ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
 
 const EMAIL = "harishbalajir2008@gmail.com";
 
 const socials = [
   { icon: Github, label: "GitHub", handle: "HarishBalajiR", href: "https://github.com/HarishBalajiR" },
-  { icon: Linkedin, label: "LinkedIn", handle: "in/HarishBalajiR", href: "https://www.linkedin.com/in/HarishBalajiR" },
+  { icon: Linkedin, label: "LinkedIn", handle: "harishbalajir", href: "https://www.linkedin.com/in/harishbalajir/" },
 ];
 
 const Contact = () => {
   return (
-    <section id="contact" className="relative py-32 border-t border-border overflow-hidden">
-      <div className="absolute inset-0 bg-hero opacity-60 pointer-events-none" />
-      <div className="absolute inset-0 grid-bg opacity-[0.12] pointer-events-none" />
-
-      <div className="relative max-w-4xl mx-auto px-6 text-center">
-        
-        <h2 className="font-display text-5xl md:text-7xl leading-[0.95] tracking-tight">
-          Let's connect
-          <br />
-          <em className="text-gradient not-italic">and build.</em>
-        </h2>
-        <p className="mt-8 text-lg text-muted-foreground max-w-xl mx-auto">
-          Open to internships, mentorship, and learning opportunities. Reach out to know more about me!
-        </p>
-
-        <div className="mt-10 flex flex-wrap justify-center gap-3">
-          <a
-            href={`mailto:${EMAIL}`}
-            className="group inline-flex items-center gap-3 px-7 py-4 rounded-full bg-primary text-primary-foreground font-medium hover:shadow-glow transition-all"
+    <section id="contact" className="py-32 md:py-40 border-t border-border">
+      <div className="max-w-[1080px] mx-auto px-6">
+        <div className="text-center max-w-[720px] mx-auto">
+          {/* Headline */}
+          <h2
+            className="font-display font-black text-[clamp(2.75rem,8vw,4.25rem)] leading-[1.1] tracking-tight mb-8 animate-fade-up"
           >
-            <Mail className="w-5 h-5" />
-            Email me
-            <ArrowUpRight className="w-4 h-4 group-hover:rotate-45 transition-transform" />
-          </a>
-        </div>
+            Let's talk about
+            <br />
+            what's next
+          </h2>
 
-        <div className="mt-16 flex flex-wrap justify-center gap-3">
-          {socials.map((s) => (
+          {/* Description */}
+          <p
+            className="text-lg md:text-[22px] text-foreground/70 leading-[1.6] mb-12 animate-fade-up"
+            style={{ animationDelay: "0.1s" }}
+          >
+            Open to SWE internships, mentorship, collaboration, and feedback on what I should build next.
+          </p>
+
+          {/* Email CTA */}
+          <div
+            className="animate-fade-up"
+            style={{ animationDelay: "0.2s" }}
+          >
             <a
-              key={s.label}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border hover:border-foreground/40 transition-colors"
+              href={`mailto:${EMAIL}`}
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-lg bg-primary text-primary-foreground font-bold text-lg hover:opacity-90 transition-opacity shadow-lg"
             >
-              <s.icon className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-              <span className="font-mono text-xs">{s.handle}</span>
+              <Mail className="w-5 h-5" />
+              {EMAIL}
             </a>
-          ))}
-        </div>
-      </div>
+          </div>
 
-      <footer className="relative mt-24 max-w-6xl mx-auto px-6 text-center text-xs font-mono text-muted-foreground">
-        © 2026, Made by Harish Balaji R.
-      </footer>
+          {/* Social Links */}
+          <div
+            className="mt-12 flex flex-wrap justify-center gap-4 animate-fade-up"
+            style={{ animationDelay: "0.3s" }}
+          >
+            {socials.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-lg border-2 border-border hover:border-foreground transition-colors"
+              >
+                <social.icon className="w-4 h-4" />
+                <span className="font-medium">{social.label}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <footer
+          className="mt-32 pt-8 border-t border-border text-center text-sm text-muted-foreground animate-fade-up"
+          style={{ animationDelay: "0.4s" }}
+        >
+          © 2026 Harish Balaji R. Built with React, TypeScript, and Tailwind CSS.
+        </footer>
+      </div>
     </section>
   );
 };

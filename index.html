@@ -3,20 +3,60 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Harish Balaji R | Aspiring Software Developer</title>
-    <meta name="description" content="My personal Portfolio" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Harish Balaji R | SWE Candidate</title>
+    <meta name="description" content="Portfolio of Harish Balaji R, a second-year Computer Science student focused on SWE internships, full-time roles, C++, Python, HTML, Git, GitHub, and problem solving." />
     <meta name="author" content="Harish Balaji R" />
 
-    <meta property="og:title" content="Harish Balaji R - Portfolio" />
-    <meta property="og:description" content="My Portfolio" />
+    <meta property="og:title" content="Harish Balaji R | SWE Candidate" />
+    <meta property="og:description" content="Second-year Computer Science student focused on SWE internships, full-time roles, projects, and problem solving." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://i.ibb.co/gbDC5wvQ/Screenshot-2026-04-21-163349.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://i.ibb.co/gbDC5wvQ/Screenshot-2026-04-21-163349.png" />
+
+    <!-- Performance: Preload critical hero images -->
+    <link rel="preload" as="image" href="/src/assets/harish-photo-new-optimized.webp" fetchpriority="high" type="image/webp" />
+    <link rel="preload" as="image" href="/src/assets/harish-photo-back.webp" fetchpriority="low" type="image/webp" />
+
+    <!-- Performance: DNS prefetch for external APIs -->
+    <link rel="dns-prefetch" href="https://leetcode.com" />
+    <link rel="dns-prefetch" href="https://api.github.com" />
+    <link rel="dns-prefetch" href="https://codeforces.com" />
+
+    <!-- Fonts: Syne (display), Geist Sans & Mono, Caveat (handwriting) - Optimized Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Geist+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+    </noscript>
   </head>
 
   <body>
+    <!-- SVG Filters for Image Enhancement -->
+    <svg style="display: none;" aria-hidden="true">
+      <defs>
+        <filter id="sharpen">
+          <feConvolveMatrix
+            order="3"
+            kernelMatrix="0 -1 0
+                         -1  5 -1
+                          0 -1 0"
+            preserveAlpha="true"
+          />
+        </filter>
+      </defs>
+    </svg>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

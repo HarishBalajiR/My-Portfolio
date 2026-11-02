@@ -1,37 +1,196 @@
+import { useEffect, useState, useMemo, useCallback, useRef } from "react";
+import { ExternalLink, BookOpen, Code2, LayoutDashboard } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from "@/components/ui/carousel";
+
+const builds = [
+  {
+    title: "Communication Readiness Platform",
+    status: "Featured Project",
+    desc: "A web platform designed to help users improve their communication skills through interactive exercises, assessments, and personalized feedback.",
+    stack: ["React", "TypeScript", "Node.js"],
+    href: "https://github.com/HarishBalajiR/communication-readiness-platform",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "Learn HTML",
+    status: "Side Project",
+    desc: "A beginner-friendly website that helps new learners understand HTML basics through simple explanations and examples. Built as a learning resource for others.",
+    stack: ["HTML", "Git", "GitHub"],
+    href: "https://github.com/HarishBalajiR/Learn-HTML",
+    icon: BookOpen,
+  },
+  {
+    title: "Problem Solving Track",
+    status: "Ongoing",
+    desc: "A steady practice track across LeetCode, Codeforces, and AtCoder, with 1400+ problems solved across all platforms.",
+    stack: ["C++", "DSA"],
+    href: "https://codolio.com/profile/harishbalajir",
+    icon: Code2,
+  },
+];
+
 const Work = () => {
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [cardProgress, setCardProgress] = useState([0, 0, 0]);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!api) return;
+
+    setCurrent(api.selectedScrollSnap());
+
+    const handleSelect = () => {
+      setCurrent(api.selectedScrollSnap());
+    };
+
+    api.on("select", handleSelect);
+
+    return () => {
+      api.off("select", handleSelect);
+    };
+  }, [api]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+
+      const section = sectionRef.current;
+      const rect = section.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      const sectionTop = rect.top;
+      const sectionHeight = rect.height;
+      const triggerPoint = windowHeight * 0.5;
+
+      if (sectionTop < triggerPoint && sectionTop > -sectionHeight) {
+        const scrollProgress = (triggerPoint - sectionTop) / (sectionHeight + triggerPoint);
+        const scrollPerCard = 100;
+
+        const newProgress = cardProgress.map((_, index) => {
+          const startScroll = index * scrollPerCard;
+          const endScroll = startScroll + scrollPerCard;
+          const totalScrolled = scrollProgress * (sectionHeight + triggerPoint);
+
+          if (totalScrolled < startScroll) return 0;
+          if (totalScrolled > endScroll) return 1;
+
+          return (totalScrolled - startScroll) / scrollPerCard;
+        });
+
+        setCardProgress(newProgress);
+      } else if (sectionTop >= triggerPoint) {
+        setCardProgress([0, 0, 0]);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <section id="work" className="relative py-28 border-t border-border">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="flex items-end justify-between gap-6 mb-16">
-          <div>
-            
-            <h2 className="font-display text-4xl md:text-5xl leading-tight">
-              Projects <em className="text-gradient not-italic">coming soon</em>.
-            </h2>
-          </div>
+    <section id="work" className="py-32 md:py-40 border-t border-border" ref={sectionRef}>
+      <div className="max-w-[1080px] mx-auto px-6">
+        {/* Section Header */}
+        <div className="mb-16 animate-fade-up">
+          <h2 className="font-display font-black text-[clamp(2.5rem,6vw,4.25rem)] leading-[1.1] tracking-tight mb-4">
+            Work
+          </h2>
+          <p className="text-lg md:text-[22px] text-foreground/70 leading-relaxed max-w-[620px]">
+            Projects, practice, and improvements that show how I'm building toward software engineering roles.
+          </p>
         </div>
 
-        <div className="relative rounded-2xl border border-dashed border-border bg-card/40 px-8 py-20 text-center overflow-hidden">
-          <div className="absolute inset-0 grid-bg opacity-[0.08] pointer-events-none" />
-          <div className="relative max-w-xl mx-auto space-y-4">
-            <div className="font-mono text-xs text-muted-foreground">STATUS: BUILDING</div>
-            <h3 className="font-display text-3xl md:text-4xl text-foreground">
-              First projects are in the works.
-            </h3>
-            <p className="text-muted-foreground leading-relaxed">
-              I'm currently learning the fundamentals and laying the groundwork for my first real-world projects.
-            </p>
-            <div className="pt-4">
-              <a
-                href="https://github.com/HarishBalajiR"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-border hover:border-primary hover:text-primary transition-colors font-mono text-xs"
-              >
-                FOLLOW MY PROGRESS ON GITHUB →
-              </a>
-            </div>
-          </div>
+        {/* Projects Carousel */}
+        <div className="animate-fade-up" style={{ animationDelay: "0.1s" }}>
+          <Carousel
+            setApi={setApi}
+            opts={{
+              align: "center",
+              loop: false,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-4">
+              {builds.map((build, index) => {
+                const Icon = build.icon;
+                const isCenter = current === index;
+
+                return (
+                  <CarouselItem key={build.title} className="pl-4 md:basis-3/5 lg:basis-1/2">
+                    <div
+                      className={`carousel-slide ${isCenter ? 'carousel-slide-center' : 'carousel-slide-side'}`}
+                      style={{
+                        opacity: cardProgress[index],
+                        transform: `translateY(${(1 - cardProgress[index]) * 80}px)`,
+                        transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
+                      }}
+                    >
+                      <a
+                        href={build.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative bg-card p-8 border-2 border-border hover:border-accent/40 transition-all duration-500 min-h-[380px] flex flex-col block overflow-hidden"
+                        style={{
+                          borderRadius: '24px 4px 24px 4px',
+                          boxShadow: '0 4px 20px -4px rgba(0, 0, 0, 0.12)'
+                        }}
+                      >
+                        {/* Corner accent */}
+                        <div className="absolute top-0 right-0 w-16 h-16 bg-accent/5 group-hover:bg-accent/10 transition-colors duration-500" style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }} />
+
+                        {/* Icon & External Link */}
+                        <div className="relative flex items-start justify-between mb-6">
+                          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-accent/10 text-accent group-hover:scale-110 transition-transform duration-500">
+                            <Icon className="w-6 h-6" />
+                          </div>
+                          <ExternalLink className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+
+                        {/* Status Badge */}
+                        <div className="inline-block w-fit px-2.5 py-1 border-l-2 border-accent text-xs font-mono font-semibold text-accent mb-4">
+                          {build.status}
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="font-display font-bold text-[clamp(1.5rem,3vw,1.75rem)] leading-tight mb-3">
+                          {build.title}
+                        </h3>
+
+                        {/* Description */}
+                        <p className="text-base text-foreground/70 leading-relaxed mb-6 flex-1">
+                          {build.desc}
+                        </p>
+
+                        {/* Tech Stack */}
+                        <div className="flex flex-wrap gap-2 pt-4 border-t border-border/50">
+                          {build.stack.map((tech) => (
+                            <span
+                              key={tech}
+                              className="px-3 py-1 rounded-lg bg-secondary text-xs font-medium"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </a>
+                    </div>
+                  </CarouselItem>
+                );
+              })}
+            </CarouselContent>
+            <CarouselPrevious className="hidden md:flex -left-12 lg:-left-16" />
+            <CarouselNext className="hidden md:flex -right-12 lg:-right-16" />
+          </Carousel>
         </div>
       </div>
     </section>

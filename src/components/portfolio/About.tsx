@@ -1,34 +1,46 @@
-const stats = [
-  { value: "1st", label: "Year of B.E. CSE" },
-  { value: "3+", label: "Languages in active use" },
-  { value: "∞", label: "Curiosity to learn" },
-];
-
 const About = () => {
   return (
-    <section id="about" className="relative py-28 border-t border-border">
-      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-12 gap-12">
-        <div className="md:col-span-4">
-          
-          <h2 className="font-display text-4xl md:text-5xl leading-tight">
-            A <em className="text-gradient not-italic">curious</em> beginner.
+    <section id="about" className="py-32 md:py-40 border-t border-border">
+      <div className="max-w-[1080px] mx-auto px-6">
+        {/* Section Header */}
+        <div className="mb-16 animate-fade-up">
+          <h2 className="font-display font-black text-[clamp(2.5rem,6vw,4.25rem)] leading-[1.1] tracking-tight mb-4">
+            About
           </h2>
         </div>
-        <div className="md:col-span-8 space-y-6 text-lg text-muted-foreground leading-relaxed">
-          <p>
-            I'm a first-year student pursuing Computer Science and Engineering at St Joseph's College of Engineering, Chennai. I spend my time learning to code, sharpening my problem-solving, and exploring how real software gets built.
-          </p>
-          <p className="text-foreground">
-            Outside the editor, you'll find me reading, playing chess, or tinkering with side ideas. My goal is simple, keep building, keep improving, and earn my spot in the tech field.
+
+        {/* Content */}
+        <div className="max-w-[620px] space-y-6 animate-fade-up" style={{ animationDelay: "0.1s" }}>
+          <p className="text-lg md:text-[22px] text-foreground/70 leading-[1.6]">
+            I'm in my second year, third semester of Computer Science and Engineering at{" "}
+            <span className="text-foreground font-semibold">St Joseph's College of Engineering, Chennai</span>.
           </p>
 
-          <div className="grid grid-cols-3 gap-6 pt-8">
-            {stats.map((s) => (
-              <div key={s.label} className="border-l border-border pl-4">
-                <div className="font-display text-3xl md:text-4xl text-foreground">{s.value}</div>
-                <div className="text-xs text-muted-foreground mt-2 leading-snug">{s.label}</div>
-              </div>
-            ))}
+          <p className="text-lg md:text-[22px] text-foreground/70 leading-[1.6]">
+            My focus is on building a strong foundation in software engineering—strengthening C++ and Python fundamentals,
+            practicing DSA, and building web projects that make learning easier.
+          </p>
+
+          <p className="text-lg md:text-[22px] text-foreground leading-[1.6] font-medium">
+            I believe in learning in public, improving through consistent problem-solving, and turning ideas into
+            projects clear enough for others to use.
+          </p>
+
+          {/* Focus Areas */}
+          <div className="pt-8 space-y-3">
+            <div className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+              Currently Focusing On
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {["C++", "Python", "Data Structures & Algorithms", "Full-stack Basics", "Git & GitHub", "Problem Solving"].map((skill) => (
+                <span
+                  key={skill}
+                  className="px-4 py-2 rounded-lg bg-secondary border border-border text-sm font-medium"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>

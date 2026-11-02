@@ -1,61 +1,134 @@
-const education = [
-  {
-    period: "2025 — 2029",
-    company: "St Joseph's College of Engineering",
-    title: "B.E. Computer Science and Engineering",
-    desc: "Currently in my first year. Building strong foundations in data structures and fundamentals.",
-  },
-];
+import { useEffect, useState, useRef } from "react";
 
 const skills = [
-  "Java", "C++", "Full-Stack", "HTML", "CSS", "JavaScript",
-  "Problem Solving", "Data Structures", "Algorithms", "Git", "Chess",
+  "C++", "Python", "HTML", "CSS", "JavaScript",
+  "Git", "GitHub", "Problem Solving",
+  "Data Structures", "Algorithms", "React", "Tailwind CSS",
 ];
 
 const Experience = () => {
-  return (
-    <section id="experience" className="relative py-28 border-t border-border">
-      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-12 gap-16">
-        <div className="md:col-span-7">
-          
-          <h2 className="font-display text-4xl md:text-5xl leading-tight mb-12">
-            Just <em className="text-gradient not-italic">getting started</em>.
-          </h2>
+  const [cardProgress, setCardProgress] = useState([0, 0]);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
-          <ol className="relative border-l border-border pl-8 space-y-10">
-            {education.map((r) => (
-              <li key={r.company} className="relative">
-                <span className="absolute -left-[37px] top-2 w-3 h-3 rounded-full bg-primary glow-dot" />
-                <div className="font-mono text-xs text-muted-foreground">{r.period}</div>
-                <div className="mt-1 flex items-baseline gap-3 flex-wrap">
-                  <span className="font-display text-2xl text-foreground">{r.company}</span>
-                </div>
-                <div className="text-muted-foreground mt-1">{r.title}</div>
-                <p className="mt-2 text-muted-foreground leading-relaxed max-w-lg">{r.desc}</p>
-              </li>
-            ))}
-          </ol>
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+
+      const section = sectionRef.current;
+      const rect = section.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      const sectionTop = rect.top;
+      const sectionHeight = rect.height;
+      const triggerPoint = windowHeight * 0.5;
+
+      if (sectionTop < triggerPoint && sectionTop > -sectionHeight) {
+        const scrollProgress = (triggerPoint - sectionTop) / (sectionHeight + triggerPoint);
+        const scrollPerCard = 200;
+
+        const newProgress = cardProgress.map((_, index) => {
+          const startScroll = index * scrollPerCard;
+          const endScroll = startScroll + scrollPerCard;
+          const totalScrolled = scrollProgress * (sectionHeight + triggerPoint);
+
+          if (totalScrolled < startScroll) return 0;
+          if (totalScrolled > endScroll) return 1;
+
+          return (totalScrolled - startScroll) / scrollPerCard;
+        });
+
+        setCardProgress(newProgress);
+      } else if (sectionTop >= triggerPoint) {
+        setCardProgress([0, 0]);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <section id="experience" className="py-32 md:py-40 border-t border-border" ref={sectionRef}>
+      <div className="max-w-[1080px] mx-auto px-6">
+        {/* Section Header */}
+        <div className="mb-16 animate-fade-up">
+          <h2 className="font-display font-black text-[clamp(2.5rem,6vw,4.25rem)] leading-[1.1] tracking-tight mb-4">
+            Experience
+          </h2>
+          <p className="text-lg md:text-[22px] text-foreground/70 leading-relaxed max-w-[620px]">
+            My education and the skills I'm building toward a career in software engineering.
+          </p>
         </div>
 
-        <div className="md:col-span-5">
-          <div className="md:sticky md:top-28">
-            
-            <h3 className="font-display text-3xl mb-8">Toolbox</h3>
-            <div className="flex flex-wrap gap-2">
-              {skills.map((s) => (
-                <span
-                  key={s}
-                  className="px-3 py-1.5 rounded-full bg-secondary border border-border font-mono text-xs hover:border-primary hover:text-primary transition-colors cursor-default"
-                >
-                  {s}
-                </span>
-              ))}
+        {/* Education */}
+        <div
+          className="mb-16"
+          style={{
+            opacity: cardProgress[0],
+            transform: `translateY(${(1 - cardProgress[0]) * 80}px)`,
+            transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
+          }}
+        >
+          <h3 className="font-mono text-xs font-bold text-accent tracking-wider mb-6">
+            EDUCATION
+          </h3>
+          <div
+            className="relative bg-card p-8 border-l-4 border-accent"
+            style={{
+              borderRadius: '0 12px 12px 0',
+              boxShadow: '0 2px 16px -4px rgba(0, 0, 0, 0.1)'
+            }}
+          >
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+              <div>
+                <h4 className="font-display font-bold text-[clamp(1.25rem,3vw,1.5rem)] mb-2">
+                  St Joseph's College of Engineering
+                </h4>
+                <p className="text-base text-foreground/70">
+                  B.E. Computer Science and Engineering
+                </p>
+              </div>
+              <div className="text-sm font-semibold text-muted-foreground">
+                2025 - 2029
+              </div>
             </div>
+            <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-accent/20">
+              <div>
+                <div className="text-xs text-muted-foreground uppercase tracking-wide">Semester</div>
+                <div className="text-2xl font-mono font-bold tabular-nums">3rd</div>
+              </div>
+              <div className="w-px h-12 bg-accent/30" />
+              <div>
+                <div className="text-xs text-muted-foreground uppercase tracking-wide">CGPA</div>
+                <div className="text-2xl font-mono font-bold tabular-nums">8.99</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            <div className="mt-10 p-6 rounded-2xl border-gradient bg-card relative">
-              <div className="font-mono text-xs text-muted-foreground mb-2">CURRENTLY LEARNING</div>
-              <div className="font-display text-xl">Full-stack development & advanced DSA</div>
-            </div>
+        {/* Skills */}
+        <div
+          style={{
+            opacity: cardProgress[1],
+            transform: `translateY(${(1 - cardProgress[1]) * 80}px)`,
+            transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
+          }}
+        >
+          <h3 className="font-mono text-xs font-bold text-accent tracking-wider mb-6">
+            SKILLS
+          </h3>
+          <div className="flex flex-wrap gap-3">
+            {skills.map((skill) => (
+              <span
+                key={skill}
+                className="px-4 py-2 bg-card border-l-2 border-accent/50 text-sm font-medium hover:border-accent hover:bg-accent/5 transition-all"
+                style={{ borderRadius: '0 8px 8px 0' }}
+              >
+                {skill}
+              </span>
+            ))}
           </div>
         </div>
       </div>

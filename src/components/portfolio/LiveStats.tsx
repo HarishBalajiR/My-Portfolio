@@ -1,4 +1,5 @@
-import { ArrowUpRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ExternalLink } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   useCodeforcesStats,
@@ -11,9 +12,7 @@ const HANDLE = "HarishBalajiR";
 type CardShellProps = {
   href: string;
   brand: string;
-  accent: string;
-  bg: string;
-  textColor: string;
+  accentColor: string;
   isLoading: boolean;
   isError: boolean;
   children: React.ReactNode;
@@ -22,9 +21,7 @@ type CardShellProps = {
 const CardShell = ({
   href,
   brand,
-  accent,
-  bg,
-  textColor,
+  accentColor,
   isLoading,
   isError,
   children,
@@ -33,36 +30,60 @@ const CardShell = ({
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    className={`group relative rounded-3xl border border-border overflow-hidden p-7 min-h-[280px] flex flex-col transition-transform hover:-translate-y-1 ${bg}`}
-    style={{ color: textColor }}
+    className="group relative block bg-card border border-border hover:border-foreground/20 transition-all duration-300 overflow-hidden"
+    style={{
+      borderRadius: '4px 16px 4px 16px',
+      borderLeftWidth: '3px',
+      borderLeftColor: accentColor,
+      boxShadow: '0 2px 12px -3px rgba(0, 0, 0, 0.1)'
+    }}
   >
-    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,transparent_60%,rgba(0,0,0,0.35)_100%)] pointer-events-none" />
+    {/* Terminal-style header bar */}
+    <div
+      className="h-1 w-full opacity-50 group-hover:opacity-100 transition-opacity"
+      style={{ backgroundColor: accentColor }}
+    />
 
-    <div className="relative flex items-center justify-between mb-6">
-      <span className="font-mono text-xs uppercase tracking-[0.2em] opacity-70">
-        {brand}
-      </span>
-      <ArrowUpRight className="w-5 h-5 opacity-60 group-hover:opacity-100 group-hover:rotate-45 transition-all" />
-    </div>
+    <div className="p-8">
+      {/* Platform Badge & Link Icon */}
+      <div className="flex items-center justify-between mb-6">
+        <span
+          className="font-mono text-xs font-bold tracking-wider"
+          style={{ color: accentColor }}
+        >
+          {brand}
+        </span>
+        <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+      </div>
 
-    <div className="relative flex-1 flex flex-col justify-between">
-      {isLoading ? (
-        <div className="space-y-4">
-          <Skeleton className="h-16 w-32 bg-white/15" />
-          <Skeleton className="h-4 w-40 bg-white/15" />
-          <Skeleton className="h-4 w-28 bg-white/15" />
-        </div>
-      ) : isError ? (
-        <div className="space-y-2">
-          <div className="font-display text-2xl" style={{ color: accent }}>
-            Stats unavailable
+      {/* Content */}
+      <div className="min-h-[240px] flex flex-col justify-between">
+        {isLoading ? (
+          <div className="space-y-4">
+            <Skeleton className="h-20 w-32 bg-border" />
+            <Skeleton className="h-4 w-40 bg-border" />
+            <Skeleton className="h-4 w-28 bg-border" />
           </div>
-          <div className="text-sm opacity-70">Visit profile →</div>
-        </div>
-      ) : (
-        children
-      )}
+        ) : isError ? (
+          <div className="space-y-2">
+            <div className="font-display text-2xl font-bold text-foreground/40">
+              Unavailable
+            </div>
+            <div className="text-sm text-muted-foreground">
+              Visit profile for latest stats
+            </div>
+          </div>
+        ) : (
+          children
+        )}
+      </div>
     </div>
+
+    {/* Subtle corner bracket decoration on hover */}
+    <div
+      className="absolute bottom-2 right-2 w-4 h-4 border-r-2 border-b-2 opacity-0 group-hover:opacity-30 transition-opacity pointer-events-none"
+      style={{ borderColor: accentColor }}
+    />
   </a>
 );
 
@@ -73,11 +94,9 @@ const Stat = ({
   label: string;
   value: React.ReactNode;
 }) => (
-  <div className="flex items-baseline justify-between text-sm opacity-80 border-t border-white/10 pt-2">
-    <span className="font-mono text-xs uppercase tracking-wider opacity-70">
-      {label}
-    </span>
-    <span className="font-mono">{value}</span>
+  <div className="flex items-baseline justify-between py-3 border-t border-border/50">
+    <span className="text-sm text-muted-foreground">{label}</span>
+    <span className="text-sm font-semibold">{value}</span>
   </div>
 );
 
@@ -86,128 +105,198 @@ const LiveStats = () => {
   const gh = useGitHubStats(HANDLE);
   const cf = useCodeforcesStats(HANDLE);
 
-  return (
-    <section
-      id="stats"
-      className="relative py-28 border-t border-border overflow-hidden"
-    >
-      <div className="absolute inset-0 grid-bg opacity-[0.08] pointer-events-none" />
+  const [cardProgress, setCardProgress] = useState([0, 0, 0]);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
-      <div className="relative max-w-6xl mx-auto px-6">
-        <div className="flex items-end justify-between flex-wrap gap-6 mb-12">
-          <h2 className="font-display text-4xl md:text-5xl leading-tight">
-            My Coding Knowledge <em className="text-gradient not-italic">at a glance</em>
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+
+      const section = sectionRef.current;
+      const rect = section.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      // Calculate when section enters viewport
+      const sectionTop = rect.top;
+      const sectionHeight = rect.height;
+
+      // Start animation when section is 50% in view
+      const triggerPoint = windowHeight * 0.5;
+
+      if (sectionTop < triggerPoint && sectionTop > -sectionHeight) {
+        // Calculate scroll progress through the section
+        const scrollProgress = (triggerPoint - sectionTop) / (sectionHeight + triggerPoint);
+
+        // Each card needs 120px of scrolling to fully appear
+        const scrollPerCard = 120;
+
+        const newProgress = cardProgress.map((_, index) => {
+          const startScroll = index * scrollPerCard;
+          const endScroll = startScroll + scrollPerCard;
+          const totalScrolled = scrollProgress * (sectionHeight + triggerPoint);
+
+          if (totalScrolled < startScroll) return 0;
+          if (totalScrolled > endScroll) return 1;
+
+          return (totalScrolled - startScroll) / scrollPerCard;
+        });
+
+        setCardProgress(newProgress);
+      } else if (sectionTop >= triggerPoint) {
+        // Reset if scrolled back up
+        setCardProgress([0, 0, 0]);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial call
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <section id="stats" className="py-32 md:py-40 border-t border-border" ref={sectionRef}>
+      <div className="max-w-[1080px] mx-auto px-6">
+        {/* Section Header */}
+        <div className="mb-16 animate-fade-up">
+          <h2 className="font-display font-black text-[clamp(2.5rem,6vw,4.25rem)] leading-[1.1] tracking-tight mb-4">
+            Live Stats
           </h2>
-          <p className="font-mono text-xs text-muted-foreground max-w-xs">
-            ​
+          <p className="text-lg md:text-[22px] text-foreground/70 leading-relaxed max-w-[620px]">
+            Real-time data from my coding platforms, updated automatically.
           </p>
         </div>
 
+        {/* Stats Grid */}
         <div className="grid md:grid-cols-3 gap-6">
           {/* LeetCode */}
-          <CardShell
-            href={`https://leetcode.com/u/${HANDLE}/`}
-            brand="LeetCode"
-            accent="#FFA116"
-            bg="bg-gradient-to-br from-neutral-900 to-black"
-            textColor="#ffffff"
-            isLoading={lc.isLoading}
-            isError={lc.isError}
+          <div
+            style={{
+              opacity: cardProgress[0],
+              transform: `translateY(${(1 - cardProgress[0]) * 80}px)`,
+              transition: 'opacity 0.1s ease-out, transform 0.1s ease-out',
+            }}
           >
+            <CardShell
+              href={`https://leetcode.com/u/${HANDLE}/`}
+              brand="LeetCode"
+              accentColor="#FFA116"
+              isLoading={lc.isLoading}
+              isError={lc.isError}
+            >
             <div>
               <div
-                className="font-display font-black text-6xl md:text-7xl leading-none"
+                className="font-mono font-black text-7xl leading-none mb-3 tabular-nums"
                 style={{ color: "#FFA116" }}
               >
                 {lc.data?.totalSolved ?? 0}
               </div>
-              <div className="mt-2 text-sm opacity-80">problems solved</div>
+              <div className="text-sm text-foreground/60 font-medium tracking-wide">
+                Problems Solved
+              </div>
             </div>
-            <div className="mt-6 space-y-2">
+            <div className="mt-6 space-y-1">
               <Stat
                 label="Easy / Med / Hard"
-                value={`${lc.data?.easySolved ?? 0} · ${lc.data?.mediumSolved ?? 0} · ${lc.data?.hardSolved ?? 0}`}
+                value={`${lc.data?.easySolved ?? 0} / ${lc.data?.mediumSolved ?? 0} / ${lc.data?.hardSolved ?? 0}`}
               />
               <Stat
-                label="Contest rating"
-                value={lc.data?.contestRating ? lc.data.contestRating : "—"}
+                label="Contest Rating"
+                value={lc.data?.contestRating ?? "N/A"}
               />
               <Stat
-                label="Current streak"
+                label="Current Streak"
                 value={`${lc.data?.currentStreak ?? 0} days`}
               />
             </div>
           </CardShell>
+          </div>
 
           {/* GitHub */}
-          <CardShell
-            href={`https://github.com/${HANDLE}`}
-            brand="GitHub"
-            accent="#ffffff"
-            bg="bg-gradient-to-br from-[#1a1a1a] to-[#0d1117]"
-            textColor="#ffffff"
-            isLoading={gh.isLoading}
-            isError={gh.isError}
+          <div
+            style={{
+              opacity: cardProgress[1],
+              transform: `translateY(${(1 - cardProgress[1]) * 80}px)`,
+              transition: 'opacity 0.1s ease-out, transform 0.1s ease-out',
+            }}
           >
+            <CardShell
+              href={`https://github.com/${HANDLE}`}
+              brand="GitHub"
+              accentColor="#6e40c9"
+              isLoading={gh.isLoading}
+              isError={gh.isError}
+            >
             <div>
-              <div className="font-display font-black text-6xl md:text-7xl leading-none">
+              <div className="font-mono font-black text-7xl leading-none text-foreground mb-3 tabular-nums">
                 {gh.data?.contributionsLastYear ?? 0}
               </div>
-              <div className="mt-2 text-sm opacity-80">
-                contributions · last year
+              <div className="text-sm text-foreground/60 font-medium tracking-wide">
+                Contributions Last Year
               </div>
             </div>
-            <div className="mt-6 space-y-2">
+            <div className="mt-6 space-y-1">
               <Stat
-                label="Public repos"
+                label="Public Repos"
                 value={gh.data?.publicRepos ?? 0}
               />
               <Stat label="Followers" value={gh.data?.followers ?? 0} />
               <Stat
-                label="Top langs"
+                label="Top Languages"
                 value={
                   gh.data?.topLanguages.length
-                    ? gh.data.topLanguages.join(" · ")
-                    : "—"
+                    ? gh.data.topLanguages.slice(0, 2).join(", ")
+                    : "N/A"
                 }
               />
             </div>
           </CardShell>
+          </div>
 
           {/* Codeforces */}
-          <CardShell
-            href={`https://codeforces.com/profile/${HANDLE}`}
-            brand="Codeforces"
-            accent="#60a5fa"
-            bg="bg-gradient-to-br from-[#1f2a44] to-[#0b1220]"
-            textColor="#ffffff"
-            isLoading={cf.isLoading}
-            isError={cf.isError}
+          <div
+            style={{
+              opacity: cardProgress[2],
+              transform: `translateY(${(1 - cardProgress[2]) * 80}px)`,
+              transition: 'opacity 0.1s ease-out, transform 0.1s ease-out',
+            }}
           >
+            <CardShell
+              href={`https://codeforces.com/profile/${HANDLE}`}
+              brand="Codeforces"
+              accentColor="#1F8ACB"
+              isLoading={cf.isLoading}
+              isError={cf.isError}
+            >
             <div>
               <div
-                className="font-display font-black text-6xl md:text-7xl leading-none"
-                style={{ color: "#60a5fa" }}
+                className="font-mono font-black text-7xl leading-none mb-3 tabular-nums"
+                style={{ color: "#1F8ACB" }}
               >
-                {cf.data?.rating || "—"}
+                {cf.data?.rating || "N/A"}
               </div>
-              <div className="mt-2 text-sm opacity-80 capitalize">
-                {cf.data?.rank ?? "current rating"}
+              <div className="text-sm text-foreground/60 font-medium tracking-wide capitalize">
+                {cf.data?.rank ?? "Current Rating"}
               </div>
             </div>
-            <div className="mt-6 space-y-2">
-              <Stat label="Max rating" value={cf.data?.maxRating || "—"} />
+            <div className="mt-6 space-y-1">
+              <Stat label="Max Rating" value={cf.data?.maxRating || "N/A"} />
               <Stat
-                label="Max rank"
-                value={<span className="capitalize">{cf.data?.maxRank ?? "—"}</span>}
+                label="Max Rank"
+                value={<span className="capitalize">{cf.data?.maxRank ?? "N/A"}</span>}
               />
               <Stat label="Contests" value={cf.data?.contests ?? 0} />
             </div>
           </CardShell>
+          </div>
         </div>
 
-        <div className="mt-8 text-center font-mono text-xs text-muted-foreground">
-          ​
+        {/* Footer Note */}
+        <div
+          className="mt-10 text-center text-sm text-muted-foreground animate-fade-up"
+          style={{ animationDelay: "0.2s" }}
+        >
+          Stats refresh automatically via public APIs
         </div>
       </div>
     </section>

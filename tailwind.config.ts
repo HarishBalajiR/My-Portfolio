@@ -14,9 +14,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Space Grotesk', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        display: ['Fraunces', 'serif'],
-        mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+        sans: ['Geist Sans', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['Syne', 'Geist Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['Geist Mono', 'JetBrains Mono', 'ui-monospace', 'monospace'],
+        handwriting: ['Caveat', 'cursive'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -78,8 +79,12 @@ export default {
           to: { height: "0" },
         },
         "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(20px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
+          "0%": { opacity: "0.001", transform: "translateY(20px)", filter: "blur(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)", filter: "blur(0)" },
+        },
+        "fade-up-large": {
+          "0%": { opacity: "0.001", transform: "translateY(40px)", filter: "blur(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)", filter: "blur(0)" },
         },
         "float": {
           "0%, 100%": { transform: "translateY(0px)" },
@@ -101,7 +106,8 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-up": "fade-up 0.7s cubic-bezier(0.22,1,0.36,1) both",
+        "fade-up": "fade-up 1.6s cubic-bezier(0.22,1,0.36,1) both",
+        "fade-up-large": "fade-up-large 1.6s cubic-bezier(0.22,1,0.36,1) both",
         "float": "float 6s ease-in-out infinite",
         "pulse-glow": "pulse-glow 3s ease-in-out infinite",
         "marquee": "marquee 30s linear infinite",
