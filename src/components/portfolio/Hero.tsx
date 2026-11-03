@@ -1,18 +1,46 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import harishPhotoFront from "../../assets/harish-photo-new-optimized.webp";
 import harishPhotoBack from "../../assets/harish-photo-back.webp";
+
+const SECTION_WAYPOINTS = [
+  { label: "Top", index: 0 },
+  { label: "About", index: 1 },
+  { label: "Experience", index: 2 },
+  { label: "Work", index: 3 },
+  { label: "Contact", index: 4 }
+] as const;
+
+const TECHNICAL_SKILLS = [
+  { name: "C++", highlight: true },
+  { name: "Python", highlight: true },
+  { name: "Data Structures & Algorithms", highlight: true },
+  { name: "React", highlight: true },
+  { name: "TypeScript", highlight: true },
+  { name: "Node.js", highlight: false },
+  { name: "Express.js", highlight: false },
+  { name: "HTML & CSS", highlight: false },
+  { name: "Tailwind CSS", highlight: false },
+  { name: "RESTful APIs", highlight: false },
+  { name: "MongoDB", highlight: false },
+  { name: "RAG & AI Integration", highlight: true },
+  { name: "Git & Version Control", highlight: false },
+  { name: "Competitive Programming", highlight: true },
+  { name: "Problem Solving", highlight: false }
+] as const;
 
 const Hero = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
+  const handleMediaChange = useCallback((e: MediaQueryListEvent) => {
+    setIsMobile(e.matches);
+  }, []);
+
   useEffect(() => {
     // Mobile detection
     const mediaQuery = window.matchMedia('(max-width: 768px)');
     setIsMobile(mediaQuery.matches);
-
-    const handleMediaChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mediaQuery.addEventListener('change', handleMediaChange);
 
     let rafId: number | null = null;
@@ -55,7 +83,7 @@ const Hero = () => {
       mediaQuery.removeEventListener('change', handleMediaChange);
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [handleMediaChange]);
 
   // Calculate rotation on Y axis (0deg to 180deg)
   const rotation = scrollProgress * 180;
@@ -88,13 +116,7 @@ const Hero = () => {
             />
 
             {/* Section waypoints */}
-            {[
-              { label: "Top", index: 0 },
-              { label: "About", index: 1 },
-              { label: "Experience", index: 2 },
-              { label: "Work", index: 3 },
-              { label: "Contact", index: 4 }
-            ].map((section) => (
+            {SECTION_WAYPOINTS.map((section) => (
               <div
                 key={section.label}
                 className="absolute -left-[5px] flex items-center gap-3 transition-all duration-300"
@@ -285,23 +307,7 @@ const Hero = () => {
                     Technical Skills
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {[
-                      { name: "C++", highlight: true },
-                      { name: "Python", highlight: true },
-                      { name: "Data Structures & Algorithms", highlight: true },
-                      { name: "React", highlight: true },
-                      { name: "TypeScript", highlight: true },
-                      { name: "Node.js", highlight: false },
-                      { name: "Express.js", highlight: false },
-                      { name: "HTML & CSS", highlight: false },
-                      { name: "Tailwind CSS", highlight: false },
-                      { name: "RESTful APIs", highlight: false },
-                      { name: "MongoDB", highlight: false },
-                      { name: "RAG & AI Integration", highlight: true },
-                      { name: "Git & Version Control", highlight: false },
-                      { name: "Competitive Programming", highlight: true },
-                      { name: "Problem Solving", highlight: false }
-                    ].map((skill) => (
+                    {TECHNICAL_SKILLS.map((skill) => (
                       <span
                         key={skill.name}
                         className={`hero-skill-badge px-3 py-1.5 rounded-lg text-sm font-semibold transition-all shadow-sm hover:shadow-md ${
