@@ -324,8 +324,8 @@
    ======================================== */
 
 /* Simplify atmospheric background on mobile */
-/* Note: 767px aligns with Tailwind md: breakpoint (mobile = up to 767px) */
-@media (max-width: 767px) {
+/* Note: 768px aligns with Tailwind md: breakpoint (mobile = up to 768px) */
+@media (max-width: 768px) {
   /* Disable all star animations */
   .star.pulse-slow,
   .star.pulse-medium,

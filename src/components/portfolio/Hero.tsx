@@ -9,7 +9,7 @@ const Hero = () => {
 
   useEffect(() => {
     // Mobile detection
-    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
     setIsMobile(mediaQuery.matches);
 
     const handleMediaChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
@@ -231,9 +231,8 @@ const Hero = () => {
               {/* Left Column: Content */}
               <div className="space-y-6">
                 <h2
-                  className="font-display font-bold transition-all duration-700"
+                  className="font-display font-bold text-3xl md:text-[38px] transition-all duration-700"
                   style={{
-                    fontSize: '38px',
                     opacity: headingOpacity,
                     transform: `translateY(${(1 - headingOpacity) * 20}px)`
                   }}
@@ -241,9 +240,8 @@ const Hero = () => {
                   Hey!
                 </h2>
                 <p
-                  className="text-foreground/70 leading-relaxed max-w-[600px] transition-all duration-700"
+                  className="text-foreground/70 text-sm md:text-[15px] leading-relaxed max-w-[600px] transition-all duration-700"
                   style={{
-                    fontSize: '15px',
                     opacity: paragraphOpacity,
                     transform: `translateY(${(1 - paragraphOpacity) * 20}px)`
                   }}
@@ -260,17 +258,17 @@ const Hero = () => {
                   }}
                 >
                   <div>
-                    <div className="font-display font-bold" style={{ fontSize: '25px' }}>3rd</div>
+                    <div className="font-display font-bold text-2xl md:text-[25px]">3rd</div>
                     <div className="text-muted-foreground">Semester</div>
                   </div>
                   <div className="w-px h-12 bg-border" />
                   <div>
-                    <div className="font-display font-bold" style={{ fontSize: '25px' }}>8.99</div>
+                    <div className="font-display font-bold text-2xl md:text-[25px]">8.99</div>
                     <div className="text-muted-foreground">CGPA</div>
                   </div>
                   <div className="w-px h-12 bg-border" />
                   <div>
-                    <div className="font-display font-bold" style={{ fontSize: '25px' }}>300+</div>
+                    <div className="font-display font-bold text-2xl md:text-[25px]">300+</div>
                     <div className="text-muted-foreground">LeetCode</div>
                   </div>
                 </div>

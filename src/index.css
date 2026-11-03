@@ -375,8 +375,8 @@
   }
 
   /* Mobile Performance Optimizations */
-  /* Consistent breakpoint: 767px = mobile, 768px+ = tablet/desktop */
-  @media (max-width: 767px) {
+  /* Consistent breakpoint: 768px = mobile, 769px+ = tablet/desktop */
+  @media (max-width: 768px) {
     /* Faster animations on mobile */
     .animate-fade-up {
       animation-duration: 0.8s;
