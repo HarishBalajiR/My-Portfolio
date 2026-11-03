@@ -5,29 +5,43 @@ const Experience = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    let rafId: number | null = null;
+
     const handleScroll = () => {
-      if (!sectionRef.current) return;
+      if (rafId !== null) return;
 
-      const section = sectionRef.current;
-      const rect = section.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
+      rafId = requestAnimationFrame(() => {
+        if (!sectionRef.current) {
+          rafId = null;
+          return;
+        }
 
-      const sectionTop = rect.top;
-      const sectionHeight = rect.height;
-      const triggerPoint = windowHeight * 0.5;
+        const section = sectionRef.current;
+        const rect = section.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
 
-      if (sectionTop < triggerPoint && sectionTop > -sectionHeight) {
-        const scrollProgress = (triggerPoint - sectionTop) / (sectionHeight + triggerPoint);
-        setCardProgress([Math.min(scrollProgress * 2, 1)]);
-      } else if (sectionTop >= triggerPoint) {
-        setCardProgress([0]);
-      }
+        const sectionTop = rect.top;
+        const sectionHeight = rect.height;
+        const triggerPoint = windowHeight * 0.5;
+
+        if (sectionTop < triggerPoint && sectionTop > -sectionHeight) {
+          const scrollProgress = (triggerPoint - sectionTop) / (sectionHeight + triggerPoint);
+          setCardProgress([Math.min(scrollProgress * 2, 1)]);
+        } else if (sectionTop >= triggerPoint) {
+          setCardProgress([0]);
+        }
+
+        rafId = null;
+      });
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   return (

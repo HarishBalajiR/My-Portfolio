@@ -15,34 +15,43 @@ const Hero = () => {
     const handleMediaChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mediaQuery.addEventListener('change', handleMediaChange);
 
+    let rafId: number | null = null;
+
     const handleScroll = () => {
-      // Calculate scroll progress for the flip (0 to 1)
-      // Flip happens in the first 400px of scroll
-      const scrollY = window.scrollY;
-      const flipDistance = 400;
-      const progress = Math.min(scrollY / flipDistance, 1);
-      setScrollProgress(progress);
+      if (rafId !== null) return;
 
-      // Calculate which section is in view for timeline
-      // Use simple viewport-based detection
-      const windowHeight = window.innerHeight;
-      const docHeight = document.documentElement.scrollHeight;
-      const maxScroll = docHeight - windowHeight;
-      const scrollPercent = scrollY / maxScroll;
+      rafId = requestAnimationFrame(() => {
+        // Calculate scroll progress for the flip (0 to 1)
+        // Flip happens in the first 400px of scroll
+        const scrollY = window.scrollY;
+        const flipDistance = 400;
+        const progress = Math.min(scrollY / flipDistance, 1);
+        setScrollProgress(progress);
 
-      // Map scroll percentage to 5 sections
-      // Adjusted for 300vh hero section
-      if (scrollPercent < 0.15) setActiveSection(0);       // Top (first 15%)
-      else if (scrollPercent < 0.35) setActiveSection(1);  // About (15-35%)
-      else if (scrollPercent < 0.6) setActiveSection(2);   // Experience (35-60%)
-      else if (scrollPercent < 0.8) setActiveSection(3);   // Work (60-80%)
-      else setActiveSection(4);                            // Contact (80-100%)
+        // Calculate which section is in view for timeline
+        // Use simple viewport-based detection
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+        const maxScroll = docHeight - windowHeight;
+        const scrollPercent = scrollY / maxScroll;
+
+        // Map scroll percentage to 5 sections
+        // Adjusted for 300vh hero section
+        if (scrollPercent < 0.15) setActiveSection(0);       // Top (first 15%)
+        else if (scrollPercent < 0.35) setActiveSection(1);  // About (15-35%)
+        else if (scrollPercent < 0.6) setActiveSection(2);   // Experience (35-60%)
+        else if (scrollPercent < 0.8) setActiveSection(3);   // Work (60-80%)
+        else setActiveSection(4);                            // Contact (80-100%)
+
+        rafId = null;
+      });
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll(); // Initial call
 
     return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
       mediaQuery.removeEventListener('change', handleMediaChange);
       window.removeEventListener("scroll", handleScroll);
     };
