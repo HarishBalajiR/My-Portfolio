@@ -261,12 +261,12 @@ const Hero = () => {
                     <div className="font-display font-bold text-2xl md:text-[25px]">3rd</div>
                     <div className="text-muted-foreground">Semester</div>
                   </div>
-                  <div className="w-px h-12 bg-border" />
+                  <div role="presentation" className="w-px h-12 bg-border" />
                   <div>
                     <div className="font-display font-bold text-2xl md:text-[25px]">8.99</div>
                     <div className="text-muted-foreground">CGPA</div>
                   </div>
-                  <div className="w-px h-12 bg-border" />
+                  <div role="presentation" className="w-px h-12 bg-border" />
                   <div>
                     <div className="font-display font-bold text-2xl md:text-[25px]">300+</div>
                     <div className="text-muted-foreground">LeetCode</div>

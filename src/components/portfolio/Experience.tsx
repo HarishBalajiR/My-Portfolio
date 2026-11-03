@@ -86,7 +86,7 @@ const Experience = () => {
                 </p>
               </div>
               <div className="text-sm font-semibold text-muted-foreground">
-                2025 - 2029
+                <time dateTime="2025">2025</time> - <time dateTime="2029">2029</time>
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-accent/20">

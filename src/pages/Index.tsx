@@ -35,12 +35,19 @@ const Index = () => {
   }, []);
 
   return (
-    <main className="min-h-screen text-foreground relative">
-      <Suspense fallback={null}>
-        <AtmosphericBackground />
-      </Suspense>
-      <Nav />
-      <Hero />
+    <>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-foreground focus:text-background focus:rounded"
+      >
+        Skip to main content
+      </a>
+      <main id="main-content" className="min-h-screen text-foreground relative">
+        <Suspense fallback={null}>
+          <AtmosphericBackground />
+        </Suspense>
+        <Nav />
+        <Hero />
       <Suspense fallback={<div className="h-screen" />}>
         <LiveStats />
       </Suspense>
@@ -57,6 +64,7 @@ const Index = () => {
         <Contact />
       </Suspense>
     </main>
+    </>
   );
 };
 
