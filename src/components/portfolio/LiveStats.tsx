@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -6,6 +5,7 @@ import {
   useGitHubStats,
   useLeetCodeStats,
 } from "@/hooks/useLiveStats";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 import harishPhotoBack from "../../assets/harish-photo-back.webp";
 
 const HANDLE = "HarishBalajiR";
@@ -106,52 +106,10 @@ const LiveStats = () => {
   const gh = useGitHubStats(HANDLE);
   const cf = useCodeforcesStats(HANDLE);
 
-  const [cardProgress, setCardProgress] = useState([0, 0, 0]);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current) return;
-
-      const section = sectionRef.current;
-      const rect = section.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-
-      // Calculate when section enters viewport
-      const sectionTop = rect.top;
-      const sectionHeight = rect.height;
-
-      // Start animation when section is 50% in view
-      const triggerPoint = windowHeight * 0.5;
-
-      if (sectionTop < triggerPoint && sectionTop > -sectionHeight) {
-        // Calculate scroll progress through the section
-        const scrollProgress = (triggerPoint - sectionTop) / (sectionHeight + triggerPoint);
-
-        // Each card needs 120px of scrolling to fully appear
-        const scrollPerCard = 120;
-
-        setCardProgress(prev => prev.map((_, index) => {
-          const startScroll = index * scrollPerCard;
-          const endScroll = startScroll + scrollPerCard;
-          const totalScrolled = scrollProgress * (sectionHeight + triggerPoint);
-
-          if (totalScrolled < startScroll) return 0;
-          if (totalScrolled > endScroll) return 1;
-
-          return (totalScrolled - startScroll) / scrollPerCard;
-        }));
-      } else if (sectionTop >= triggerPoint) {
-        // Reset if scrolled back up
-        setCardProgress(prev => prev.every(p => p === 0) ? prev : [0, 0, 0]);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial call
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const { sectionRef, cardProgress } = useScrollReveal({
+    cardCount: 3,
+    scrollPerCard: 120
+  });
 
   return (
     <section id="stats" className="mt-[600px] md:mt-0 py-12 md:py-16 border-t border-border" ref={sectionRef}>

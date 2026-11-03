@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Trophy, Award, Medal, FileCheck, ExternalLink } from "lucide-react";
 import {
   Carousel,
@@ -66,9 +67,12 @@ const iconComponents = {
 const Achievements = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
-  const [cardProgress, setCardProgress] = useState([0, 0, 0]);
   const [showSwipeHint, setShowSwipeHint] = useState(true);
-  const sectionRef = useRef<HTMLDivElement>(null);
+
+  const { sectionRef, cardProgress } = useScrollReveal({
+    cardCount: 4,
+    scrollPerCard: 120
+  });
 
   useEffect(() => {
     if (!api) return;
@@ -87,43 +91,6 @@ const Achievements = () => {
       api.off("select", handleSelect);
     };
   }, [api]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current) return;
-
-      const section = sectionRef.current;
-      const rect = section.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-
-      const sectionTop = rect.top;
-      const sectionHeight = rect.height;
-      const triggerPoint = windowHeight * 0.5;
-
-      if (sectionTop < triggerPoint && sectionTop > -sectionHeight) {
-        const scrollProgress = (triggerPoint - sectionTop) / (sectionHeight + triggerPoint);
-        const scrollPerCard = 120;
-
-        setCardProgress(prev => prev.map((_, index) => {
-          const startScroll = index * scrollPerCard;
-          const endScroll = startScroll + scrollPerCard;
-          const totalScrolled = scrollProgress * (sectionHeight + triggerPoint);
-
-          if (totalScrolled < startScroll) return 0;
-          if (totalScrolled > endScroll) return 1;
-
-          return (totalScrolled - startScroll) / scrollPerCard;
-        }));
-      } else if (sectionTop >= triggerPoint) {
-        setCardProgress(prev => prev.every(p => p === 0) ? prev : prev.map(() => 0));
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <section id="achievements" className="py-12 md:py-16 border-t border-border" ref={sectionRef}>
