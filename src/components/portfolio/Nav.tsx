@@ -1,5 +1,7 @@
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Menu } from "lucide-react";
+import { useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import logoPhoto from "@/assets/logo-photo.webp";
 
 const links = [
@@ -13,9 +15,10 @@ const links = [
 
 const Nav = () => {
   const { theme, toggleTheme } = useTheme();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="fixed top-6 inset-x-0 z-50 px-6">
+    <header className="absolute md:fixed top-6 inset-x-0 z-50 px-6">
       <nav className="max-w-[1280px] mx-auto bg-secondary/80 text-foreground backdrop-blur-md rounded-lg px-6 py-3 flex items-center justify-between shadow-lg border border-border/50 nav-animated-border">
         {/* Logo */}
         <a
@@ -54,10 +57,52 @@ const Nav = () => {
 
         {/* Right Side Actions */}
         <div className="flex items-center gap-3">
+          {/* Mobile Menu (Hamburger) */}
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild className="lg:hidden">
+              <button
+                className="p-3 rounded-lg hover:bg-foreground/5 transition-all duration-300"
+                aria-label="Open menu"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[280px] sm:w-[320px]">
+              <SheetHeader>
+                <SheetTitle>Navigation</SheetTitle>
+              </SheetHeader>
+              <nav className="flex flex-col gap-4 pt-4">
+                {links.map((l) => (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const targetId = l.href.substring(1); // Remove #
+                      const targetElement = document.getElementById(targetId);
+
+                      setMobileMenuOpen(false);
+
+                      // Wait for sheet to close, then scroll
+                      setTimeout(() => {
+                        if (targetElement) {
+                          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                      }, 300);
+                    }}
+                    className="px-4 py-3 rounded-lg text-lg font-medium hover:bg-foreground/5 transition-all"
+                  >
+                    {l.label}
+                  </a>
+                ))}
+              </nav>
+            </SheetContent>
+          </Sheet>
+
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="p-2.5 rounded-lg hover:bg-foreground/5 transition-all duration-300"
+            className="p-3 rounded-lg hover:bg-foreground/5 transition-all duration-300"
             aria-label="Toggle theme"
           >
             {theme === "light" ? (

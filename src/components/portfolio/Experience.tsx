@@ -1,13 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 
-const skills = [
-  "C++", "Python", "HTML", "CSS", "JavaScript",
-  "Git", "GitHub", "Problem Solving",
-  "Data Structures", "Algorithms", "React", "Tailwind CSS",
-];
-
 const Experience = () => {
-  const [cardProgress, setCardProgress] = useState([0, 0]);
+  const [cardProgress, setCardProgress] = useState([0]);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,22 +18,9 @@ const Experience = () => {
 
       if (sectionTop < triggerPoint && sectionTop > -sectionHeight) {
         const scrollProgress = (triggerPoint - sectionTop) / (sectionHeight + triggerPoint);
-        const scrollPerCard = 200;
-
-        const newProgress = cardProgress.map((_, index) => {
-          const startScroll = index * scrollPerCard;
-          const endScroll = startScroll + scrollPerCard;
-          const totalScrolled = scrollProgress * (sectionHeight + triggerPoint);
-
-          if (totalScrolled < startScroll) return 0;
-          if (totalScrolled > endScroll) return 1;
-
-          return (totalScrolled - startScroll) / scrollPerCard;
-        });
-
-        setCardProgress(newProgress);
+        setCardProgress([Math.min(scrollProgress * 2, 1)]);
       } else if (sectionTop >= triggerPoint) {
-        setCardProgress([0, 0]);
+        setCardProgress([0]);
       }
     };
 
@@ -50,7 +31,7 @@ const Experience = () => {
   }, []);
 
   return (
-    <section id="experience" className="py-32 md:py-40 border-t border-border" ref={sectionRef}>
+    <section id="experience" className="py-12 md:py-16 border-t border-border" ref={sectionRef}>
       <div className="max-w-[1080px] mx-auto px-6">
         {/* Section Header */}
         <div className="mb-16 animate-fade-up">
@@ -105,30 +86,6 @@ const Experience = () => {
                 <div className="text-2xl font-mono font-bold tabular-nums">8.99</div>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Skills */}
-        <div
-          style={{
-            opacity: cardProgress[1],
-            transform: `translateY(${(1 - cardProgress[1]) * 80}px)`,
-            transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
-          }}
-        >
-          <h3 className="font-mono text-xs font-bold text-accent tracking-wider mb-6">
-            SKILLS
-          </h3>
-          <div className="flex flex-wrap gap-3">
-            {skills.map((skill) => (
-              <span
-                key={skill}
-                className="px-4 py-2 bg-card border-l-2 border-accent/50 text-sm font-medium hover:border-accent hover:bg-accent/5 transition-all"
-                style={{ borderRadius: '0 8px 8px 0' }}
-              >
-                {skill}
-              </span>
-            ))}
           </div>
         </div>
       </div>

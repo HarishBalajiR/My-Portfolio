@@ -6,6 +6,7 @@ import {
   useGitHubStats,
   useLeetCodeStats,
 } from "@/hooks/useLiveStats";
+import harishPhotoBack from "../../assets/harish-photo-back.webp";
 
 const HANDLE = "HarishBalajiR";
 
@@ -155,7 +156,39 @@ const LiveStats = () => {
   }, []);
 
   return (
-    <section id="stats" className="py-32 md:py-40 border-t border-border" ref={sectionRef}>
+    <section id="stats" className="mt-[600px] md:mt-0 py-12 md:py-16 border-t border-border" ref={sectionRef}>
+      {/* Mobile Photo - Only visible on mobile, positioned in the gap above */}
+      <div className="md:hidden flex flex-col items-center -mt-[550px] mb-[100px] px-6">
+        {/* Creative "This is Me" text */}
+        <div className="mb-3 relative">
+          <div className="flex items-center gap-2">
+            <div className="h-[2px] w-8 bg-gradient-to-r from-transparent via-accent to-accent"></div>
+            <span
+              className="text-accent font-bold text-lg tracking-wider relative"
+              style={{
+                fontFamily: "'Caveat', cursive",
+                fontSize: '28px',
+                textShadow: '2px 2px 4px rgba(239, 68, 68, 0.2)',
+                transform: 'rotate(-2deg)'
+              }}
+            >
+              This is Me
+            </span>
+            <div className="h-[2px] w-8 bg-gradient-to-l from-transparent via-accent to-accent"></div>
+          </div>
+        </div>
+
+        <div className="w-[240px] h-[320px] rounded-[20px] overflow-hidden shadow-card border border-border/50 bg-gradient-to-br from-secondary to-background">
+          <img
+            src={harishPhotoBack}
+            alt="Harish Balaji R"
+            className="h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+
       <div className="max-w-[1080px] mx-auto px-6">
         {/* Section Header */}
         <div className="mb-16 animate-fade-up">

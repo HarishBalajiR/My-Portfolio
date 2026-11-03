@@ -323,7 +323,39 @@
    Responsive Adjustments
    ======================================== */
 
-@media (max-width: 768px) {
+/* Simplify atmospheric background on mobile */
+/* Note: 767px aligns with Tailwind md: breakpoint (mobile = up to 767px) */
+@media (max-width: 767px) {
+  /* Disable all star animations */
+  .star.pulse-slow,
+  .star.pulse-medium,
+  .star.pulse-fast {
+    animation: none !important;
+    opacity: 0.7;
+  }
+
+  /* Disable cloud animations */
+  .cloud {
+    animation: none !important;
+  }
+
+  /* Hide grass layer entirely on mobile (if present) */
+  .grass-layer {
+    display: none;
+  }
+
+  /* Remove GPU-intensive filters */
+  .star-layer {
+    filter: none;
+  }
+
+  /* Simplify celestial glow */
+  #moon-glow,
+  #sun-glow {
+    opacity: 0.5;
+  }
+
+  /* Simplify hero glow */
   .hero-glow {
     width: 600px;
     height: 400px;
@@ -333,10 +365,6 @@
   .horizon-line {
     bottom: 25vh;
   }
-
-  .grass-layer {
-    height: 150px;
-  }
 }
 
 @media (max-width: 480px) {
@@ -344,9 +372,5 @@
     width: 400px;
     height: 300px;
     filter: blur(60px);
-  }
-
-  .grass-layer {
-    height: 120px;
   }
 }

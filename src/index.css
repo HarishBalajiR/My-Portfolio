@@ -373,4 +373,47 @@
       transform: translate(30px, 40px) scale(0.92);
     }
   }
+
+  /* Mobile Performance Optimizations */
+  /* Consistent breakpoint: 767px = mobile, 768px+ = tablet/desktop */
+  @media (max-width: 767px) {
+    /* Faster animations on mobile */
+    .animate-fade-up {
+      animation-duration: 0.8s;
+    }
+
+    /* Simplify photo filter */
+    .photo-enhanced {
+      filter: contrast(1.05) saturate(1.08);
+    }
+  }
+
+  /* Disable nav border animation on mobile */
+  @media (max-width: 1024px) {
+    .nav-animated-border::before {
+      animation: none;
+      opacity: 0.3;
+    }
+  }
+
+  /* Touch device optimizations */
+  @media (hover: none) and (pointer: coarse) {
+    /* Add active states for touch feedback */
+    button:active,
+    a:active {
+      transform: scale(0.98);
+      transition: transform 0.1s;
+    }
+  }
+
+  /* Reduced motion support - CSS and JS animations */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }

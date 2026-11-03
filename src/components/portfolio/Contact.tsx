@@ -9,7 +9,7 @@ const socials = [
 
 const Contact = () => {
   return (
-    <section id="contact" className="py-32 md:py-40 border-t border-border">
+    <section id="contact" className="py-12 md:py-16 border-t border-border">
       <div className="max-w-[1080px] mx-auto px-6">
         <div className="text-center max-w-[720px] mx-auto">
           {/* Headline */}

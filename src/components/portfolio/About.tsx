@@ -1,6 +1,6 @@
 const About = () => {
   return (
-    <section id="about" className="py-32 md:py-40 border-t border-border">
+    <section id="about" className="py-12 md:py-16 border-t border-border">
       <div className="max-w-[1080px] mx-auto px-6">
         {/* Section Header */}
         <div className="mb-16 animate-fade-up">
@@ -25,23 +25,6 @@ const About = () => {
             I believe in learning in public, improving through consistent problem-solving, and turning ideas into
             projects clear enough for others to use.
           </p>
-
-          {/* Focus Areas */}
-          <div className="pt-8 space-y-3">
-            <div className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-              Currently Focusing On
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {["C++", "Python", "Data Structures & Algorithms", "Full-stack Basics", "Git & GitHub", "Problem Solving"].map((skill) => (
-                <span
-                  key={skill}
-                  className="px-4 py-2 rounded-lg bg-secondary border border-border text-sm font-medium"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </section>

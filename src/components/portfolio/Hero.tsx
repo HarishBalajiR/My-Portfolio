@@ -5,8 +5,16 @@ import harishPhotoBack from "../../assets/harish-photo-back.webp";
 const Hero = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    // Mobile detection
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mediaQuery.matches);
+
+    const handleMediaChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mediaQuery.addEventListener('change', handleMediaChange);
+
     const handleScroll = () => {
       // Calculate scroll progress for the flip (0 to 1)
       // Flip happens in the first 400px of scroll
@@ -34,7 +42,10 @@ const Hero = () => {
     window.addEventListener("scroll", handleScroll);
     handleScroll(); // Initial call
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      mediaQuery.removeEventListener('change', handleMediaChange);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   // Calculate rotation on Y axis (0deg to 180deg)
@@ -104,7 +115,7 @@ const Hero = () => {
           </div>
       </div>
 
-      <section id="top" className="relative min-h-[300vh]">
+      <section id="top" className="relative min-h-[200vh]">
         {/* About anchor target - positioned where the Hey section becomes visible */}
         <div id="about" className="absolute" style={{ top: '50vh' }} />
 
@@ -156,7 +167,7 @@ const Hero = () => {
                   style={{
                     transformStyle: "preserve-3d",
                     transform: `rotateY(${rotation}deg) scale(${scale})`,
-                    transition: "transform 0.1s ease-out",
+                    transition: isMobile ? "transform 0.1s ease-out" : "transform 0.4s ease-out",
                   }}
                 >
                   {/* Front Face */}
@@ -211,8 +222,9 @@ const Hero = () => {
               {/* Left Column: Content */}
               <div className="space-y-6">
                 <h2
-                  className="text-5xl font-display font-bold transition-all duration-700"
+                  className="font-display font-bold transition-all duration-700"
                   style={{
+                    fontSize: '38px',
                     opacity: headingOpacity,
                     transform: `translateY(${(1 - headingOpacity) * 20}px)`
                   }}
@@ -220,8 +232,9 @@ const Hero = () => {
                   Hey!
                 </h2>
                 <p
-                  className="text-lg text-foreground/70 leading-relaxed max-w-[600px] transition-all duration-700"
+                  className="text-foreground/70 leading-relaxed max-w-[600px] transition-all duration-700"
                   style={{
+                    fontSize: '15px',
                     opacity: paragraphOpacity,
                     transform: `translateY(${(1 - paragraphOpacity) * 20}px)`
                   }}
@@ -238,17 +251,17 @@ const Hero = () => {
                   }}
                 >
                   <div>
-                    <div className="text-3xl font-display font-bold">3rd</div>
+                    <div className="font-display font-bold" style={{ fontSize: '25px' }}>3rd</div>
                     <div className="text-muted-foreground">Semester</div>
                   </div>
                   <div className="w-px h-12 bg-border" />
                   <div>
-                    <div className="text-3xl font-display font-bold">8.99</div>
+                    <div className="font-display font-bold" style={{ fontSize: '25px' }}>8.99</div>
                     <div className="text-muted-foreground">CGPA</div>
                   </div>
                   <div className="w-px h-12 bg-border" />
                   <div>
-                    <div className="text-3xl font-display font-bold">300+</div>
+                    <div className="font-display font-bold" style={{ fontSize: '25px' }}>300+</div>
                     <div className="text-muted-foreground">LeetCode</div>
                   </div>
                 </div>
@@ -265,12 +278,30 @@ const Hero = () => {
                     Technical Skills
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {["C++", "Python", "Data Structures & Algorithms", "React", "TypeScript", "Node.js", "Git & GitHub", "Problem Solving"].map((skill) => (
+                    {[
+                      { name: "C++", highlight: true },
+                      { name: "Python", highlight: true },
+                      { name: "Data Structures & Algorithms", highlight: true },
+                      { name: "React", highlight: true },
+                      { name: "TypeScript", highlight: true },
+                      { name: "Node.js", highlight: false },
+                      { name: "Express.js", highlight: false },
+                      { name: "HTML & CSS", highlight: false },
+                      { name: "Tailwind CSS", highlight: false },
+                      { name: "RESTful APIs", highlight: false },
+                      { name: "MongoDB", highlight: false },
+                      { name: "RAG & AI Integration", highlight: true },
+                      { name: "Git & Version Control", highlight: false },
+                      { name: "Competitive Programming", highlight: true },
+                      { name: "Problem Solving", highlight: false }
+                    ].map((skill) => (
                       <span
-                        key={skill}
-                        className="hero-skill-badge px-3 py-1.5 rounded-lg text-sm font-semibold transition-all shadow-sm hover:shadow-md"
+                        key={skill.name}
+                        className={`hero-skill-badge px-3 py-1.5 rounded-lg text-sm font-semibold transition-all shadow-sm hover:shadow-md ${
+                          skill.highlight ? 'ring-2 ring-accent/50 bg-accent/10 dark:bg-accent/20' : ''
+                        }`}
                       >
-                        {skill}
+                        {skill.name}
                       </span>
                     ))}
                   </div>
@@ -345,7 +376,7 @@ const Hero = () => {
                   style={{
                     transformStyle: "preserve-3d",
                     transform: `rotateY(${rotation}deg)`,
-                    transition: "transform 0.1s ease-out",
+                    transition: "transform 0.4s ease-out",
                   }}
                 >
                   {/* Front Face */}

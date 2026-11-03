@@ -67,6 +67,7 @@ const Achievements = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [cardProgress, setCardProgress] = useState([0, 0, 0]);
+  const [showSwipeHint, setShowSwipeHint] = useState(true);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -76,6 +77,8 @@ const Achievements = () => {
 
     const handleSelect = () => {
       setCurrent(api.selectedScrollSnap());
+      // Hide swipe hint after first interaction
+      setShowSwipeHint(false);
     };
 
     api.on("select", handleSelect);
@@ -125,7 +128,7 @@ const Achievements = () => {
   }, []);
 
   return (
-    <section id="achievements" className="py-32 md:py-40 border-t border-border" ref={sectionRef}>
+    <section id="achievements" className="py-12 md:py-16 border-t border-border" ref={sectionRef}>
       <div className="max-w-[1080px] mx-auto px-6">
         {/* Section Header */}
         <div className="mb-16 animate-fade-up">
@@ -135,6 +138,36 @@ const Achievements = () => {
           <p className="text-lg md:text-[22px] text-foreground/70 leading-relaxed max-w-[620px]">
             Milestones and recognitions from my journey in competitive programming and tech communities.
           </p>
+
+          {/* Creative Swipe Indicator */}
+          <div
+            className={`mt-8 flex items-center justify-center gap-3 transition-opacity duration-500 ${
+              showSwipeHint && achievements.length > 1 ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+          >
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/30 backdrop-blur-sm">
+              <svg
+                className="w-5 h-5 text-accent animate-pulse"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span className="text-sm font-medium text-accent">Swipe to see more</span>
+              <svg
+                className="w-5 h-5 text-accent animate-pulse"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                style={{ animationDelay: '0.15s' }}
+              >
+                <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
         </div>
 
         {/* Achievements Carousel */}
@@ -247,21 +280,6 @@ const Achievements = () => {
           </Carousel>
         </div>
 
-        {/* Empty State for Future Achievements */}
-        <div
-          className="mt-10 p-8 border-2 border-dashed border-border/50 text-center"
-          style={{
-            borderRadius: '12px 4px 12px 4px',
-            opacity: cardProgress[2] > 0.5 ? 1 : 0,
-            transform: `translateY(${cardProgress[2] > 0.5 ? 0 : 20}px)`,
-            transition: 'opacity 0.5s ease-out, transform 0.5s ease-out'
-          }}
-        >
-          <Medal className="w-10 h-10 mx-auto mb-4 text-muted-foreground/40" />
-          <p className="text-sm text-muted-foreground">
-            More achievements coming soon as I continue my journey in competitive programming and software engineering.
-          </p>
-        </div>
       </div>
     </section>
   );
