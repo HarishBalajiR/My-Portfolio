@@ -131,7 +131,7 @@ const LiveStats = () => {
         // Each card needs 120px of scrolling to fully appear
         const scrollPerCard = 120;
 
-        const newProgress = cardProgress.map((_, index) => {
+        setCardProgress(prev => prev.map((_, index) => {
           const startScroll = index * scrollPerCard;
           const endScroll = startScroll + scrollPerCard;
           const totalScrolled = scrollProgress * (sectionHeight + triggerPoint);
@@ -140,12 +140,10 @@ const LiveStats = () => {
           if (totalScrolled > endScroll) return 1;
 
           return (totalScrolled - startScroll) / scrollPerCard;
-        });
-
-        setCardProgress(newProgress);
+        }));
       } else if (sectionTop >= triggerPoint) {
         // Reset if scrolled back up
-        setCardProgress([0, 0, 0]);
+        setCardProgress(prev => prev.every(p => p === 0) ? prev : [0, 0, 0]);
       }
     };
 

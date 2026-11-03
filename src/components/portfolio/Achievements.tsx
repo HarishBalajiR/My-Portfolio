@@ -104,7 +104,7 @@ const Achievements = () => {
         const scrollProgress = (triggerPoint - sectionTop) / (sectionHeight + triggerPoint);
         const scrollPerCard = 120;
 
-        const newProgress = cardProgress.map((_, index) => {
+        setCardProgress(prev => prev.map((_, index) => {
           const startScroll = index * scrollPerCard;
           const endScroll = startScroll + scrollPerCard;
           const totalScrolled = scrollProgress * (sectionHeight + triggerPoint);
@@ -113,11 +113,9 @@ const Achievements = () => {
           if (totalScrolled > endScroll) return 1;
 
           return (totalScrolled - startScroll) / scrollPerCard;
-        });
-
-        setCardProgress(newProgress);
+        }));
       } else if (sectionTop >= triggerPoint) {
-        setCardProgress([0, 0, 0]);
+        setCardProgress(prev => prev.every(p => p === 0) ? prev : prev.map(() => 0));
       }
     };
 
