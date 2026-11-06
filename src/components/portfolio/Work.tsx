@@ -133,16 +133,23 @@ const Work = () => {
                         transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
                       }}
                     >
-                      <a
-                        href={build.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group relative bg-card p-8 border-2 border-border hover:border-accent/40 transition-all duration-500 min-h-[380px] flex flex-col block overflow-hidden"
+                      <article
+                        className="group relative bg-card p-8 border-2 border-border hover:border-accent/40 transition-all duration-500 min-h-[380px] flex flex-col overflow-hidden"
                         style={{
                           borderRadius: '24px 4px 24px 4px',
                           boxShadow: '0 4px 20px -4px rgba(0, 0, 0, 0.12)'
                         }}
                       >
+                        <a
+                          href={build.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="absolute inset-0 z-10"
+                          aria-label={`View ${build.title} project`}
+                        >
+                          <span className="sr-only">{build.title}</span>
+                        </a>
+
                         {/* Corner accent */}
                         <div className="absolute top-0 right-0 w-16 h-16 bg-accent/5 group-hover:bg-accent/10 transition-colors duration-500" style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }} />
 
@@ -180,7 +187,7 @@ const Work = () => {
                             </span>
                           ))}
                         </div>
-                      </a>
+                      </article>
                     </div>
                   </CarouselItem>
                 );

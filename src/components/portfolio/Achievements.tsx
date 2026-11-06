@@ -150,13 +150,6 @@ const Achievements = () => {
                 const IconComponent = iconComponents[achievement.icon];
                 const isCenter = current === index;
 
-                const CardWrapper = achievement.href ? 'a' : 'div';
-                const cardProps = achievement.href ? {
-                  href: achievement.href,
-                  target: "_blank",
-                  rel: "noopener noreferrer"
-                } : {};
-
                 return (
                   <CarouselItem key={achievement.id} className="pl-4 md:basis-3/5 lg:basis-3/5">
                     <div
@@ -167,14 +160,24 @@ const Achievements = () => {
                         transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
                       }}
                     >
-                      <CardWrapper
-                        {...cardProps}
-                        className="group relative block bg-card border-2 border-border hover:border-accent/40 transition-all duration-500 overflow-hidden"
+                      <article
+                        className="group relative bg-card border-2 border-border hover:border-accent/40 transition-all duration-500 overflow-hidden"
                         style={{
                           borderRadius: '16px 4px 16px 4px',
                           boxShadow: '0 4px 20px -4px rgba(0, 0, 0, 0.12)'
                         }}
                       >
+                        {achievement.href && (
+                          <a
+                            href={achievement.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="absolute inset-0 z-10"
+                            aria-label={`View ${achievement.title} details`}
+                          >
+                            <span className="sr-only">{achievement.title}</span>
+                          </a>
+                        )}
                         {/* Image or Icon */}
                         {achievement.image ? (
                           <div className="relative h-56 overflow-hidden bg-secondary/30">
@@ -234,7 +237,7 @@ const Achievements = () => {
 
                         {/* Corner accent */}
                         <div className="absolute bottom-0 right-0 w-12 h-12 bg-accent/5 group-hover:bg-accent/10 transition-colors duration-500" style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 100%)' }} />
-                      </CardWrapper>
+                      </article>
                     </div>
                   </CarouselItem>
                 );

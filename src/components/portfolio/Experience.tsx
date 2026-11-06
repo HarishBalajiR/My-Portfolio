@@ -69,7 +69,7 @@ const Experience = () => {
           <h3 className="font-mono text-xs font-bold text-accent tracking-wider mb-6">
             EDUCATION
           </h3>
-          <div
+          <article
             className="relative bg-card p-8 border-l-4 border-accent"
             style={{
               borderRadius: '0 12px 12px 0',
@@ -89,18 +89,18 @@ const Experience = () => {
                 <time dateTime="2025">2025</time> - <time dateTime="2029">2029</time>
               </div>
             </div>
-            <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-accent/20">
+            <dl className="flex flex-wrap items-center gap-6 pt-4 border-t border-accent/20 m-0">
               <div>
-                <div className="text-xs text-muted-foreground uppercase tracking-wide">Semester</div>
-                <div className="text-2xl font-mono font-bold tabular-nums">3rd</div>
+                <dt className="text-xs text-muted-foreground uppercase tracking-wide">Semester</dt>
+                <dd className="text-2xl font-mono font-bold tabular-nums m-0">3rd</dd>
               </div>
-              <div className="w-px h-12 bg-accent/30" />
+              <div className="w-px h-12 bg-accent/30" aria-hidden="true" />
               <div>
-                <div className="text-xs text-muted-foreground uppercase tracking-wide">CGPA</div>
-                <div className="text-2xl font-mono font-bold tabular-nums">8.99</div>
+                <dt className="text-xs text-muted-foreground uppercase tracking-wide">CGPA</dt>
+                <dd className="text-2xl font-mono font-bold tabular-nums m-0">8.99</dd>
               </div>
-            </div>
-          </div>
+            </dl>
+          </article>
         </div>
       </div>
     </section>

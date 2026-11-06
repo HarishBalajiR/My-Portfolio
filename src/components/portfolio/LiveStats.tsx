@@ -27,11 +27,8 @@ const CardShell = ({
   isError,
   children,
 }: CardShellProps) => (
-  <a
-    href={href}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="group relative block bg-card border border-border hover:border-foreground/20 transition-all duration-300 overflow-hidden"
+  <article
+    className="group relative bg-card border border-border hover:border-foreground/20 transition-all duration-300 overflow-hidden"
     style={{
       borderRadius: '4px 16px 4px 16px',
       borderLeftWidth: '3px',
@@ -39,53 +36,60 @@ const CardShell = ({
       boxShadow: '0 2px 12px -3px rgba(0, 0, 0, 0.1)'
     }}
   >
-    {/* Terminal-style header bar */}
-    <div
-      className="h-1 w-full opacity-50 group-hover:opacity-100 transition-opacity"
-      style={{ backgroundColor: accentColor }}
-    />
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block"
+    >
+      {/* Terminal-style header bar */}
+      <div
+        className="h-1 w-full opacity-50 group-hover:opacity-100 transition-opacity"
+        style={{ backgroundColor: accentColor }}
+      />
 
-    <div className="p-8">
-      {/* Platform Badge & Link Icon */}
-      <div className="flex items-center justify-between mb-6">
-        <span
-          className="font-mono text-xs font-bold tracking-wider"
-          style={{ color: accentColor }}
-        >
-          {brand}
-        </span>
-        <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="p-8">
+        {/* Platform Badge & Link Icon */}
+        <div className="flex items-center justify-between mb-6">
+          <span
+            className="font-mono text-xs font-bold tracking-wider"
+            style={{ color: accentColor }}
+          >
+            {brand}
+          </span>
+          <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+        </div>
+
+        {/* Content */}
+        <div className="min-h-[240px] flex flex-col justify-between">
+          {isLoading ? (
+            <div className="space-y-4">
+              <Skeleton className="h-20 w-32 bg-border" />
+              <Skeleton className="h-4 w-40 bg-border" />
+              <Skeleton className="h-4 w-28 bg-border" />
+            </div>
+          ) : isError ? (
+            <div className="space-y-2">
+              <div className="font-display text-2xl font-bold text-foreground/40">
+                Unavailable
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Visit profile for latest stats
+              </div>
+            </div>
+          ) : (
+            children
+          )}
+        </div>
       </div>
 
-      {/* Content */}
-      <div className="min-h-[240px] flex flex-col justify-between">
-        {isLoading ? (
-          <div className="space-y-4">
-            <Skeleton className="h-20 w-32 bg-border" />
-            <Skeleton className="h-4 w-40 bg-border" />
-            <Skeleton className="h-4 w-28 bg-border" />
-          </div>
-        ) : isError ? (
-          <div className="space-y-2">
-            <div className="font-display text-2xl font-bold text-foreground/40">
-              Unavailable
-            </div>
-            <div className="text-sm text-muted-foreground">
-              Visit profile for latest stats
-            </div>
-          </div>
-        ) : (
-          children
-        )}
-      </div>
-    </div>
-
-    {/* Subtle corner bracket decoration on hover */}
-    <div
-      className="absolute bottom-2 right-2 w-4 h-4 border-r-2 border-b-2 opacity-0 group-hover:opacity-30 transition-opacity pointer-events-none"
-      style={{ borderColor: accentColor }}
-    />
-  </a>
+      {/* Subtle corner bracket decoration on hover */}
+      <div
+        className="absolute bottom-2 right-2 w-4 h-4 border-r-2 border-b-2 opacity-0 group-hover:opacity-30 transition-opacity pointer-events-none"
+        style={{ borderColor: accentColor }}
+      />
+    </a>
+  </article>
 );
 
 const Stat = ({
@@ -95,9 +99,11 @@ const Stat = ({
   label: string;
   value: React.ReactNode;
 }) => (
-  <div className="flex items-baseline justify-between py-3 border-t border-border/50">
-    <span className="text-sm text-muted-foreground">{label}</span>
-    <span className="text-sm font-semibold">{value}</span>
+  <div className="py-3 border-t border-border/50">
+    <dl className="flex items-baseline justify-between m-0">
+      <dt className="text-sm text-muted-foreground">{label}</dt>
+      <dd className="text-sm font-semibold m-0">{value}</dd>
+    </dl>
   </div>
 );
 
@@ -221,7 +227,7 @@ const LiveStats = () => {
                 {gh.data?.contributionsLastYear ?? 0}
               </div>
               <div className="text-sm text-foreground/60 font-medium tracking-wide">
-                Contributions Last Year
+                Commits Last Year
               </div>
             </div>
             <div className="mt-6 space-y-1">
@@ -281,12 +287,12 @@ const LiveStats = () => {
         </div>
 
         {/* Footer Note */}
-        <div
+        <aside
           className="mt-10 text-center text-sm text-muted-foreground animate-fade-up"
           style={{ animationDelay: "0.2s" }}
         >
           Stats refresh automatically via public APIs
-        </div>
+        </aside>
       </div>
     </section>
   );
